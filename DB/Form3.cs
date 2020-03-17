@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace DB
 {
-    public partial class Form1 : Form
+    public partial class Form3 : Form
     {
-        public Form1()
+        public Form3()
         {
             InitializeComponent();
         }
@@ -23,23 +23,21 @@ namespace DB
             string connectionString = "datasource=127.0.0.1;port=3306;username=root;password=student;database=mydb";
             MySqlConnection connection = new MySqlConnection(connectionString);
             connection.Open();
-            //admin:123
-            MySqlCommand command = new MySqlCommand($"SELECT * FROM mydb.user WHERE user.username = '{loginBox.Text}' AND user.password = '{passwordBox.Text}'", connection);
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
-            adapter.SelectCommand = command;
-            DataTable table = new DataTable();
-            adapter.Fill(table);
-            if (table.Rows.Count == 0)
+            MySqlCommand createUserCommand = new MySqlCommand(
+                "INSERT INTO mydb.name1 set name1 = 'Вася';" +
+                "INSERT INTO mydb.name2 set name2 = 'Пупкин';" +
+                "INSERT INTO mydb.name3 set name3 = 'Васильевич';", connection);
+            try
             {
-                MessageBox.Show("Wrong password!");
-                return;
+                createUserCommand.ExecuteNonQuery();
+                MessageBox.Show("Suceed!");
             }
-            else
-                MessageBox.Show("Login succeed!");
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Hide();
+            }
             connection.Close();
-            this.Hide();
-            new Form2().Show();
-            
         }
     }
 }
